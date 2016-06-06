@@ -4,12 +4,13 @@
   "version": "0.1.0",
   "command": "npm",
   "isShellCommand": true,
-  "showOutput": "always",
+  "showOutput": "silent",
   "suppressTaskName": true,
   "tasks": [
     {
       "taskName": "start",
-      "args": ["start"]
+      "args": ["start"],
+      "isBuildCommand": true
     }
   ]
 }
