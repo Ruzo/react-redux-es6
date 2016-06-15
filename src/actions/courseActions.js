@@ -3,8 +3,9 @@ import courseApi from '../api/mockCourseApi';
 
 export function saveCourse(course){
   return function(dispatch, getState){
+    const action = course.id ? {type: actionTypes.UPDATE_COURSE, course} : {type: actionTypes.SAVE_COURSE, course};
     return courseApi.saveCourse(course)
-      .then(course => dispatch({type: actionTypes.SAVE_COURSE, course}))
+      .then(course => dispatch(action))
       .catch(error => {throw (error);});
   };
 }
