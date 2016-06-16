@@ -1,4 +1,5 @@
 import delay from './delay';
+import ls from 'local-storage';
 
 // This file mocks a web API by working with the hard-coded data below.
 // It uses setTimeout to simulate the delay of an AJAX call.
@@ -57,14 +58,18 @@ const generateId = (course) => {
 
 class CourseApi {
   static getAllCourses() {
+    if(!ls('courses')){
+      ls('courses', courses);
+    }
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(Object.assign([], courses));
+        resolve(Object.assign([], ls('courses')));
       }, delay);
     });
   }
 
   static saveCourse(course) {
+    let coursesList = ls('courses');
     course = Object.assign({}, course); // to avoid manipulating object passed in.
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -75,29 +80,32 @@ class CourseApi {
         }
 
         if (course.id) {
-          const existingCourseIndex = courses.findIndex(a => a.id == course.id);
-          courses.splice(existingCourseIndex, 1, course);
+
+          const existingCourseIndex = coursesList.findIndex(a => a.id == course.id);
+          coursesList.splice(existingCourseIndex, 1, course);
         } else {
           //Just simulating creation here.
           //The server would generate ids and watchHref's for new courses in a real app.
           //Cloning so copy returned is passed by value rather than by reference.
           course.id = generateId(course);
           course.watchHref = `http://www.pluralsight.com/courses/${course.id}`;
-          courses.push(course);
+          coursesList.push(course);
         }
-
+        ls('courses', coursesList);
         resolve(course);
       }, delay);
     });
   }
 
   static deleteCourse(courseId) {
+    let coursesList = ls('courses');
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const indexOfCourseToDelete = courses.findIndex(course => {
+        const indexOfCourseToDelete = coursesList.findIndex(course => {
           course.courseId == courseId;
         });
-        courses.splice(indexOfCourseToDelete, 1);
+        coursesList.splice(indexOfCourseToDelete, 1);
+        ls('courses', coursesList);
         resolve();
       }, delay);
     });

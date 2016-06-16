@@ -1,4 +1,5 @@
 import delay from './delay';
+import ls from 'local-storage';
 
 // This file mocks a web API by working with the hard-coded data below.
 // It uses setTimeout to simulate the delay of an AJAX call.
@@ -28,6 +29,9 @@ const generateId = (author) => {
 
 class AuthorApi {
   static getAllAuthors() {
+    if(!ls('authors')){
+      ls('authors', authors);
+    }
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(Object.assign([], authors));
@@ -36,6 +40,7 @@ class AuthorApi {
   }
 
   static saveAuthor(author) {
+    let authorsList = ls('authors');
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // Simulate server-side validation
@@ -49,28 +54,30 @@ class AuthorApi {
         }
 
         if (author.id) {
-          const existingAuthorIndex = authors.findIndex(a => a.id == author.id);
-          authors.splice(existingAuthorIndex, 1, author);
+          const existingAuthorIndex = authorsList.findIndex(a => a.id == author.id);
+          authorsList.splice(existingAuthorIndex, 1, author);
         } else {
           //Just simulating creation here.
           //The server would generate ids for new authors in a real app.
           //Cloning so copy returned is passed by value rather than by reference.
           author.id = generateId(author);
-          authors.push(author);
+          authorsList.push(author);
         }
-
+        ls('authors', authorsList);
         resolve(Object.assign({}, author));
       }, delay);
     });
   }
 
   static deleteAuthor(authorId) {
+    let authorsList = ls('authors');
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const indexOfAuthorToDelete = authors.findIndex(author => {
           author.authorId == authorId;
         });
         authors.splice(indexOfAuthorToDelete, 1);
+        ls('authors', authorsList);
         resolve();
       }, delay);
     });
