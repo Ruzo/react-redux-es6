@@ -6,16 +6,16 @@ import toastr from 'toastr';
 export function saveCourse(course){
   return function(dispatch, getState){
     dispatch({type: actionTypes.INCREASE_DBSTATUS});
-    const action = course.id ? {type: actionTypes.UPDATE_COURSE, course} : {type: actionTypes.SAVE_COURSE, course};
+    // const action = course.id ? {type: actionTypes.UPDATE_COURSE, course} : {type: actionTypes.SAVE_COURSE, course};
     return courseApi.saveCourse(course)
       .then(course => {
-        dispatch(action);
+        dispatch(course.id ? {type: actionTypes.UPDATE_COURSE, course} : {type: actionTypes.SAVE_COURSE, course});
         dispatch({type: actionTypes.DECREASE_DBSTATUS});
-        return course;
       })
       .catch(error => {
         toastr.error(error);
         dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        throw (error);
       });
   };
 }
@@ -31,6 +31,7 @@ export function loadAllCourses(courses){
       .catch(error => {
         toastr.error(error);
         dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        throw (error);
       });
   };
 }
@@ -45,6 +46,7 @@ export function getCourseById(id){
       .catch(error => {
         toastr.error(error);
         dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        throw (error);
       });
   };
 }

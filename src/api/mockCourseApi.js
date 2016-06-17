@@ -70,7 +70,6 @@ class CourseApi {
 
   static saveCourse(course) {
     let coursesList = ls('courses');
-    course = Object.assign({}, course); // to avoid manipulating object passed in.
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // Simulate server-side validation
@@ -78,21 +77,22 @@ class CourseApi {
         if (course.title.length < minCourseTitleLength) {
           reject(`Title must be at least ${minCourseTitleLength} characters.`);
         }
+        else {
+          if (course.id) {
 
-        if (course.id) {
-
-          const existingCourseIndex = coursesList.findIndex(a => a.id == course.id);
-          coursesList.splice(existingCourseIndex, 1, course);
-        } else {
-          //Just simulating creation here.
-          //The server would generate ids and watchHref's for new courses in a real app.
-          //Cloning so copy returned is passed by value rather than by reference.
-          course.id = generateId(course);
-          course.watchHref = `http://www.pluralsight.com/courses/${course.id}`;
-          coursesList.push(course);
+            const existingCourseIndex = coursesList.findIndex(a => a.id == course.id);
+            coursesList.splice(existingCourseIndex, 1, course);
+          } else {
+            //Just simulating creation here.
+            //The server would generate ids and watchHref's for new courses in a real app.
+            //Cloning so copy returned is passed by value rather than by reference.
+            course.id = generateId(course);
+            course.watchHref = `http://www.pluralsight.com/courses/${course.id}`;
+            coursesList.push(course);
+          }
+          ls('courses', coursesList);
+          resolve(Object.assign({}, course));
         }
-        ls('courses', coursesList);
-        resolve(course);
       }, delay);
     });
   }

@@ -34,6 +34,7 @@ class ManageCoursePage extends React.Component{
   }
 
   redirectToCourses(){
+    this.setState({saving: false});
     toastr.success('Course saved!');
     this.context.router.push('/courses');
   }
@@ -42,11 +43,12 @@ class ManageCoursePage extends React.Component{
     e.preventDefault();
     this.setState({saving: true});
     this.props.actions.saveCourse(this.state.course)
-      .then(course => {
+      .then(() => {
+        this.redirectToCourses();
+      })
+      .catch(error => {
         this.setState({saving: false});
-        if(course){
-          this.redirectToCourses();
-        }
+        // do not redirect
       });
   }
 
@@ -77,7 +79,7 @@ ManageCoursePage.contextTypes = {
 
 function mapStateToProps(state, ownProps){
   const courseId = ownProps.params.id;
-  let course = {id:"", watchHref:"", title:"", authorId:"", length:"", category:""};
+  let course = {id:'', watchHref:'', title:'', authorId:'', length:'', category:''};
   if(courseId && state.courses.length > 0){
     course = state.courses.filter(eachCourse => eachCourse.id == courseId)[0] || null;
   }

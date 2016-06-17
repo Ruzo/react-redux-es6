@@ -3,12 +3,10 @@ import initialState from './initialState';
 
 export default function dbStatusReducer(state = initialState.dbStatus, action){
   if(action.type == actionTypes.INCREASE_DBSTATUS){
-    state++;
-    return state;
+    return state + 1;
   }
   else if(action.type == actionTypes.DECREASE_DBSTATUS){
-    state--;
-    return state < 0 ? 0 : state;
+    return state == 0 ? 0 : state - 1;
   }
 
   return state;
