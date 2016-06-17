@@ -17,3 +17,12 @@ nav {
 div.jumbotron {
   padding-left: 70px;
 }
+
+.react-spinner{
+  height: 20px;
+  margin-top: -20px;
+}
+
+.react-spinner_bar{
+  background-color: saddlebrown;
+}

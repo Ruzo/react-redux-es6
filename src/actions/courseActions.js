@@ -1,27 +1,50 @@
 import actionTypes from './actionTypes';
 import courseApi from '../api/mockCourseApi';
+import * as dbStatusActions from './dbStatusActions';
+import toastr from 'toastr';
 
 export function saveCourse(course){
   return function(dispatch, getState){
+    dispatch({type: actionTypes.INCREASE_DBSTATUS});
     const action = course.id ? {type: actionTypes.UPDATE_COURSE, course} : {type: actionTypes.SAVE_COURSE, course};
     return courseApi.saveCourse(course)
-      .then(course => dispatch(action))
-      .catch(error => {throw (error);});
+      .then(course => {
+        dispatch(action);
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        return course;
+      })
+      .catch(error => {
+        toastr.error(error);
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+      });
   };
 }
 
 export function loadAllCourses(courses){
   return function(dispatch){
+    dispatch({type: actionTypes.INCREASE_DBSTATUS});
     return courseApi.getAllCourses()
-            .then(courses => dispatch({type: actionTypes.LOAD_ALL_COURSES, courses}))
-            .catch(error => {throw (error);});
+      .then(courses => {
+        dispatch({type: actionTypes.LOAD_ALL_COURSES, courses});
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+      })
+      .catch(error => {
+        toastr.error(error);
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+      });
   };
 }
 
 export function getCourseById(id){
   return function(dispatch){
     return courseApi.getAllCourses()
-      .then(courses => dispatch ({type: actionTypes.GET_COURSE_BY_ID, id, courses}))
-      .catch(error => {throw (error);});
+      .then(courses => {
+        dispatch ({type: actionTypes.GET_COURSE_BY_ID, id, courses});
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+      })
+      .catch(error => {
+        toastr.error(error);
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
+      });
   };
 }

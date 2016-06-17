@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
 import courses from './courseReducer';
 import authors from './authorReducer';
+import dbStatus from './dbStatusReducer';
 
 const rootReducer = combineReducers({
   courses,
-  authors
+  authors,
+  dbStatus
 });
 
 export default rootReducer;

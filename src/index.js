@@ -9,8 +9,10 @@ import {Provider} from 'react-redux';
 import routes from './routes';
 import {loadAllCourses} from './actions/courseActions';
 import {loadAllAuthors} from './actions/authorActions';
-import './styles/styles.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/react-spinner/react-spinner.css';
+import '../node_modules/toastr/build/toastr.css';
+import './styles/styles.css';
 
 const store = configureStore();
 store.dispatch(loadAllCourses());
