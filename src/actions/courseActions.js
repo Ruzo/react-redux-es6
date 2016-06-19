@@ -52,17 +52,17 @@ export function getCourseById(id){
   };
 }
 
-export function deleteCourse(id){
+export function deleteCourse(course){
   return function(dispatch){
-    // dispatch({type: actionTypes.INCREASE_DBSTATUS});
-    return courseApi.deleteCourse(id)
+    dispatch({type: actionTypes.INCREASE_DBSTATUS});
+    return courseApi.deleteCourse(course)
       .then(courseId => {
         dispatch({type: actionTypes.DELETE_COURSE, courseId});
-        // dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
       })
       .catch(error => {
         toastr.error(error);
-        // dispatch({type: actionTypes.DECREASE_DBSTATUS});
+        dispatch({type: actionTypes.DECREASE_DBSTATUS});
         throw (error);
       });
   };

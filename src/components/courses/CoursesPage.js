@@ -17,9 +17,8 @@ class CoursesPage extends React.Component{
     browserHistory.push('/course');
   }
 
-  deleteCourse(id){
-    // console.log(`Delete button return: ${id}`);
-    this.props.deleteCourse(id);
+  deleteCourse(course){
+  this.props.deleteCourse(course);
   }
 
   render(){
@@ -40,6 +39,17 @@ class CoursesPage extends React.Component{
   }
 }
 
+function sorted(list){
+  return list.sort((a, b) => {
+    let title_a = a.title.toUpperCase();
+    let title_b = b.title.toUpperCase();
+
+    if(title_a > title_b) return 1;
+    if(title_a < title_b) return -1;
+    return 0;
+  });
+}
+
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
   deleteCourse: PropTypes.func.isRequired
@@ -47,7 +57,7 @@ CoursesPage.propTypes = {
 
 function mapStateToProps(state, ownProps){
   return {
-    courses: state.courses
+    courses: sorted([...state.courses])
   };
 }
 

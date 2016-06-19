@@ -24,9 +24,9 @@ const CoursesRender = ({courses, deleteCourse}) => {
               <td>{course.category}</td>
               <td>{course.length}</td>
               <td>
-                <button className="btn btn-default btn-xs" onClick={function(){deleteCourse(course.id);}}>
+                <a className="btn-xs" role="button" onClick={function(){deleteCourse(course);}}>
                     <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
+                </a>
               </td>
             </tr>
           )}
