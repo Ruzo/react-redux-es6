@@ -58,7 +58,7 @@ const generateId = (course) => {
 
 class CourseApi {
   static getAllCourses() {
-    if(!ls('courses')){
+    if(!ls('courses') || ls('courses').length == 0){
       ls('courses', courses);
     }
     return new Promise((resolve, reject) => {
@@ -106,8 +106,8 @@ class CourseApi {
         });
         coursesList.splice(indexOfCourseToDelete, 1);
         ls('courses', coursesList);
-        resolve();
-      }, delay);
+        resolve(courseId);
+      }, 1);
     });
   }
 }
