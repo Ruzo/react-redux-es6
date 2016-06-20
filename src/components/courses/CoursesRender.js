@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
+import CourseRow from './CourseRow';
 
 const CoursesRender = ({courses, deleteCourse}) => {
   return (
@@ -17,18 +18,11 @@ const CoursesRender = ({courses, deleteCourse}) => {
         </thead>
         <tbody>
           {courses.map((course, index) =>
-            <tr key={index}>
-              <td><a href={course.watchHref} target="_blank">Watch</a></td>
-              <td><Link to={`/course/${course.id}`}>{course.title}</Link></td>
-              <td>{course.authorId}</td>
-              <td>{course.category}</td>
-              <td>{course.length}</td>
-              <td>
-                <a className="btn-xs" role="button" onClick={function(){deleteCourse(course);}}>
-                  <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </a>
-              </td>
-            </tr>
+            <CourseRow
+              key={index}
+              course={course}
+              deleteCourse={deleteCourse}
+            />
           )}
         </tbody>
       </table>
